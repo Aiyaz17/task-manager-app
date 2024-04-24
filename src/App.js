@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "./Components/Header";
+import TaskContainer from "./Components/TaskContainer";
 import TaskManagerContext from "./Contexts/TaskManagerContext";
 
 const App = () => {
@@ -74,6 +75,7 @@ const App = () => {
 
   return <TaskManagerContext.Provider value={value}  >
     <Header />
+    <TaskContainer />
   </TaskManagerContext.Provider>;
 };
 

@@ -5,7 +5,8 @@ import TaskManagerContext from "./Contexts/TaskManagerContext";
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [backupTasks, setBackupTasks] = useState(tasks);
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   const generateTaskId = () => {
     return `task-${Math.random().toString(36).substring(2, 15)}-${Date.now()}`;
@@ -19,41 +20,42 @@ const App = () => {
     });
   };
 
-  const syncTasks = (tasks) => {
-    setTasks(tasks);
-    setBackupTasks(tasks);
-  };
-
   const addTask = (newTaskLabel) => {
     const newTask = {
       id: generateTaskId(),
       label: newTaskLabel,
       completed: false,
     };
-    const updatedTasks = [newTask, ...tasks];
-    syncTasks(updatedTasks);
-    sortTasks(updatedTasks);
+    const newTasks = [newTask, ...tasks];
+    setTasks(newTasks);
+    sortTasks(newTasks);
+    handleFilterChange(filter, newTasks);
+
   };
 
-  const updateTask = (updatedTask) => {
-    const updatedTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
-    syncTasks(updatedTasks);
+  const updateTask = (newTaskUpdate) => {
+    const updatedTasks = tasks.map((task) => (task.id === newTaskUpdate.id ? newTaskUpdate : task));
+    setTasks(updatedTasks);
     sortTasks(updatedTasks);
+    handleFilterChange(filter, updatedTasks);
   };
 
   const deleteTask = (taskId) => {
-    const updatedTasks = tasks.filter((task) => task.id !== taskId);
-    syncTasks(updatedTasks);
-    sortTasks(updatedTasks);
+    const newTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(newTasks);
+    sortTasks(newTasks);
   };
 
-  const handleFilterChange = (newFilter) => {
-
+  const handleFilterChange = (newFilter, updatedTasks) => {
+    setFilter(newFilter);
     if (newFilter === "all") {
-      setTasks(backupTasks);
+      setFilteredTasks([]);
       return;
     }
-    const updatedTasks = backupTasks.filter((task) => {
+
+    const filterableList = updatedTasks ? updatedTasks : tasks;
+
+    const tempFilteredTasks = filterableList.filter((task) => {
       if (newFilter === "active") {
         return !task.completed;
       }
@@ -62,7 +64,7 @@ const App = () => {
       }
       return task;
     });
-    setTasks(updatedTasks);
+    setFilteredTasks(tempFilteredTasks);
   }
 
   const value = {
@@ -71,6 +73,8 @@ const App = () => {
     updateTask,
     deleteTask,
     setFilter: handleFilterChange,
+    filteredTasks,
+    filter
   };
 
   return <TaskManagerContext.Provider value={value}  >

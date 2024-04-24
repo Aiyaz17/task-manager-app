@@ -4,10 +4,17 @@ import TaskContext from '../Contexts/TaskManagerContext';
 import EditddTaskPopup from './AddTaskPopup';
 
 const TaskList = () => {
-    const { tasks } = useContext(TaskContext);
+    const { tasks, filteredTasks, filter } = useContext(TaskContext);
     return (
         <div className='mt-5 flex flex-col gap-y-5 bg-[#ecedf6] p-5 rounded-xl'>
-            {tasks.length === 0 ? <p className='text-neutral-600 font-sm'>No tasks</p> : tasks.map((task, id) => (
+            {tasks.length === 0 && <p className='text-neutral-600 font-sm'>No tasks</p>}
+            {filter !== "all" && filteredTasks.length === 0 && <p className='text-neutral-600 font-sm'>No tasks</p>}
+
+            {filter !== "all" && filteredTasks.map((task, id) => (
+                <Task task={{ ...task }} key={id} />
+            ))}
+
+            {filter === "all" && tasks.map((task, id) => (
                 <Task task={{ ...task }} key={id} />
             ))}
         </div>
@@ -41,7 +48,7 @@ const Task = ({ task }) => {
         <div className='flex justify-between items-center bg-white rounded-md h-14 p-2 gap-x-2'>
             <div className="flex items-center h-5 select-none">
                 <input checked={task.completed} onChange={handleCheckboxChange} id={task.id} type="checkbox" className="w-5 h-5 checked:bg-[#6270ed] rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-white" />
-                <label for={task.id} className={`ml-3 text-md font-medium text-neutral-600 line-clamp-1	 ${task.completed && "line-through"}`}>{task.label}</label>
+                <label htmlFor={task.id} className={`ml-3 text-md font-medium text-neutral-600 line-clamp-1	 ${task.completed && "line-through"}`}>{task.label}</label>
             </div>
             <div className='flex gap-x-3'>
                 <p className='icons' onClick={handleDelete}><MdDelete size={22} /></p>

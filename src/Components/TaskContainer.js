@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import TaskList from './TaskList'
 import TaskContext from '../Contexts/TaskManagerContext';
+import AddTaskPopup from './AddTaskPopup';
 
 const TaskContainer = () => {
     const [isAddTaskPopupOpen, setIsAddTaskPopupOpen] = useState(false);
@@ -23,7 +24,9 @@ const TaskContainer = () => {
                 <button className='bg-[#6270ed] px-5 py-2 rounded-md shadow-sm text-white' onClick={handleTogglePopup}>Add Task</button>
             </div>
             <TaskList />
-
+            {isAddTaskPopupOpen && (
+                <AddTaskPopup onClose={handleTogglePopup} onSubmit={handleAddTaskSubmit} />
+            )}
         </div>
     )
 }

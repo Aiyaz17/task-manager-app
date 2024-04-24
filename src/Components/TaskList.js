@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { MdDelete, MdEdit } from "react-icons/md";
 import TaskContext from '../Contexts/TaskManagerContext';
+import EditddTaskPopup from './AddTaskPopup';
 
 const TaskList = () => {
     const { tasks } = useContext(TaskContext);
@@ -45,6 +46,8 @@ const Task = ({ task }) => {
             <div className='flex gap-x-3'>
                 <p className='icons' onClick={handleDelete}><MdDelete size={22} /></p>
                 <p className='icons' onClick={handleTogglePopup}><MdEdit size={22} /></p>
+                {isEditTaskPopupOpen && <EditddTaskPopup onClose={handleTogglePopup} onSubmit={handleEditTaskSubmit} oldTask={task.label} />
+                }
             </div>
         </div>
     )

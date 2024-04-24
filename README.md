@@ -1,7 +1,9 @@
 ## React Task Manager
 
 This is a React application designed to manage your tasks. You can add new tasks, edit existing ones, mark them as completed, and even delete them!
+
 Live Project Link - https://task-manager-master.netlify.app/
+
 ### Installation
 
 1. **Clone the project** from GitHub:
